@@ -8,6 +8,19 @@ class Services {
   async pegarTodosOsRegistros() {
     return dataSource[this.model].findAll();
   }
+  
+  async criarPessoa(pessoa) {
+    return await dataSource[this.model].create(pessoa);
+  }
+  
+  async atualizarRegistro(dadosAtualizados, id) {
+    const ListadeRegistrosAtualizados = dataSource[this.model].update(dadosAtualizados, { where: { id: id } });
+    if (ListadeRegistrosAtualizados[0] === 0) {
+      return false;
+    }
+    return true;
+  }
+
 }
 
 
