@@ -17,7 +17,7 @@ class Controller {
     try {
       const pessoa = await this.entidadeService.buscarPorId(Number(id));
       return res.status(200).json(pessoa);
-    } catch(erro) {
+    } catch (erro) {
       //errors
     }
   }
@@ -37,12 +37,22 @@ class Controller {
     const dadosPessoas = req.body;
     try {
       const foiAtualizado = await this.entidadeService.atualizarRegistro(dadosPessoas, Number(id));
-      if(!foiAtualizado) {
-        return res.status(400).json({message: 'Não foi atualizado'});
+      if (!foiAtualizado) {
+        return res.status(400).json({ message: 'Não foi atualizado' });
       }
-      return res.status(200).json({message: 'Atualizado com sucesso'});
-    } catch(erro) {
+      return res.status(200).json({ message: 'Atualizado com sucesso' });
+    } catch (erro) {
       // error
+    }
+  }
+
+  async deletarPorId(req, res) {
+    const { id } = req.params;
+    try {
+      await this.entidadeService.deletaPessoa(Number(id));
+      return res.status(200).json({ mensagem: `id ${id} deletado` });
+    } catch (erro) {
+      return res.status(500).json(erro.message);
     }
   }
 }

@@ -25,6 +25,10 @@ class Services {
     return true;
   }
 
+  async deletaPessoa(id) {
+    return dataSource[this.model].destroy({ where: { id: id } });
+  }
+
 }
 
 
