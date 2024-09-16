@@ -12,6 +12,16 @@ class Controller {
     }
   }
 
+  async buscarPorid(req, res) {
+    const { id } = req.params;
+    try {
+      const pessoa = await this.entidadeService.buscarPorId(Number(id));
+      return res.status(200).json(pessoa);
+    } catch(erro) {
+      //errors
+    }
+  }
+
   async cadastrarPessoa(req, res) {
     const dadosParaCriacao = req.body;
     try {

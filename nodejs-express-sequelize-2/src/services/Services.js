@@ -8,6 +8,10 @@ class Services {
   async pegarTodosOsRegistros() {
     return dataSource[this.model].findAll();
   }
+
+  async buscarPorId(id) {
+    return await dataSource[this.model].findByPk(id);
+  }
   
   async criarPessoa(pessoa) {
     return await dataSource[this.model].create(pessoa);
