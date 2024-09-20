@@ -8,7 +8,7 @@ class Controller {
       const listaRegistro = await this.entidadeService.pegarTodosOsRegistros();
       return res.status(200).json(listaRegistro);
     } catch (erro) {
-      // errors
+      return res.status(500).json({ mensagem: erro.message });
     }
   }
 
@@ -18,7 +18,7 @@ class Controller {
       const pessoa = await this.entidadeService.buscarPorId(Number(id));
       return res.status(200).json(pessoa);
     } catch (erro) {
-      //errors
+      return res.status(500).json({ mensagem: erro.message });
     }
   }
 
@@ -28,7 +28,7 @@ class Controller {
       const pessoa = await this.entidadeService.criarPessoa(dadosParaCriacao);
       return res.status(201).json(pessoa);
     } catch (erro) {
-      //erro
+      return res.status(500).json({ mensagem: erro.message });
     }
   }
 
@@ -42,7 +42,7 @@ class Controller {
       }
       return res.status(200).json({ message: 'Atualizado com sucesso' });
     } catch (erro) {
-      // error
+      return res.status(500).json({ mensagem: erro.message });
     }
   }
 

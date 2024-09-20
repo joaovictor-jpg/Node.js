@@ -1,4 +1,4 @@
-const dataSource = require('../models');
+const dataSource = require('../dataBase/models');
 
 class Services {
   constructor(nomeDeModule) {
