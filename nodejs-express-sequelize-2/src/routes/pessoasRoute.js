@@ -13,8 +13,12 @@ router.get('/pessoas/:id', (req, res) => pessoaController.buscarPorid(req, res))
 router.post('/pessoas', (req, res) => pessoaController.cadastrarPessoa(req, res));
 router.put('/pessoas/:id', (req, res) => pessoaController.atualizar(req, res));
 router.delete('/pessoas/:id', (req, res) => pessoaController.deletarPorId(req, res));
-router.get('/pessoas/:estudanteId/matriculas', (req, res) => pessoaController.pegaMatriculas(req, res));
-router.post('/pessoas/:estudanteid/matriculas', (req, res) => matriculaController.cadastrarPessoa(req, res));
+router.get('/pessoas/:estudante_id/matriculas', (req, res) => pessoaController.pegaMatriculasAtivas(req, res));
+router.get('/pessoas/:estudante_id/matriculas/todos', (req, res) => pessoaController.pegaTodasAsMatriculas(req, res));
+router.get('/pessoas/:estudante_id/matriculas/:id', (req, res) => matriculaController.pegaUm(req, res));
+router.post('/pessoas/:estudante_id/matriculas', (req, res) => matriculaController.cadastrarPessoa(req, res));
+router.put('/pessoas/:estudante_id/matriculas/:id', (req, res) => matriculaController.atualizar(req, res));
+router.delete('/pessoas/:estudante_id/matriculas/:id', (req, res) => matriculaController.deletarPorId(req, res));
 
 
 module.exports = router;
