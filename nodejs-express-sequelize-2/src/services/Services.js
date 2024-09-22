@@ -5,8 +5,9 @@ class Services {
     this.model = nomeDeModule;
   }
 
-  async pegarTodosOsRegistros() {
-    return dataSource[this.model].findAll();
+  async pegarTodosOsRegistros(where = {}) {
+    console.log(where);
+    return dataSource[this.model].findAll({ where: { ...where }});
   }
 
   async pegaRegistroPorEscopo (escopo) {
