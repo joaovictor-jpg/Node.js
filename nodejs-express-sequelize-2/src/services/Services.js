@@ -21,6 +21,14 @@ class Services {
   async pegaUmRegistro(where) {
     return await dataSource[this.model].findOne({ where: { ...where } });
   }
+
+  async pagaEContaRegistros(where) {
+    return await dataSource[this.model].findAndCountAll({
+      where: { ...where },
+      limit: 2,
+      order: [['id', 'DESC']]
+    });
+  }
   
   async criarPessoa(pessoa) {
     return await dataSource[this.model].create(pessoa);
