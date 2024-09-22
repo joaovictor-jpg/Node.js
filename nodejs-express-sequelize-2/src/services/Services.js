@@ -30,8 +30,14 @@ class Services {
     return await dataSource[this.model].create(pessoa);
   }
   
-  async atualizarRegistro(dadosAtualizados, where) {
-    const ListadeRegistrosAtualizados = dataSource[this.model].update(dadosAtualizados, { where: { ...where } });
+  async atualizarRegistro(dadosAtualizados, where, transacao = {}) {
+    const ListadeRegistrosAtualizados = await dataSource[this.model].update(
+      dadosAtualizados,
+      { 
+        where: { ...where },
+        transaction: transacao
+      }
+    );
     if (ListadeRegistrosAtualizados[0] === 0) {
       return false;
     }
@@ -39,7 +45,7 @@ class Services {
   }
 
   async deletaPessoa(where) {
-    return dataSource[this.model].destroy({ where: { ...where } });
+    return await dataSource[this.model].destroy({ where: { ...where } });
   }
 
 }
