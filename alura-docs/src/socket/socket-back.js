@@ -1,4 +1,4 @@
-import { atualizaDocumento, encontrarDocumento, obterDocumentos } from "../db/documentodb.js";
+import { adicionarDocumento, atualizaDocumento, encontrarDocumento, excluirDocumento, obterDocumentos } from "../db/documentodb.js";
 import io from "../servidor.js";
 
 io.on("connection", (socket) => {
@@ -6,6 +6,21 @@ io.on("connection", (socket) => {
     socket.on("obter_documentos", async (devolverDocumentos) => {
         const documentos = await obterDocumentos();
         devolverDocumentos(documentos);
+    });
+
+    socket.on("gravarDocumento", async (nomeDocumento) => {
+        const documentoExiste = (await encontrarDocumento(nomeDocumento)) !== null;
+
+        if (documentoExiste) {
+            socket.emit("documento_existente", nomeDocumento);
+        } else {
+            const documento = await adicionarDocumento(nomeDocumento);
+
+            if (documento.acknowledged) {
+                io.emit("adicionar_documento_interface", nomeDocumento);
+            }
+        }
+
     });
 
     socket.on("selecionar_documento", async (nomeDocumento, devolveTexto) => {
@@ -28,9 +43,13 @@ io.on("connection", (socket) => {
         }
     });
 
-
     socket.on("disconnect", (motivo) => {
         console.log(`Cliente "${socket.id}" desconectado!
         Motivo: ${motivo}`);
+    });
+
+    socket.on("excluir_documento", async (nomeDocumento) => {
+        const resultado = await excluirDocumento(nomeDocumento);
+        console.log(resultado);
     });
 });

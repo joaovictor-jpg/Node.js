@@ -1,5 +1,6 @@
-import { emitirTextoEditor, selecionarDocumento } from "./socket/socket-front-documento.js";
+import { emitirExcluirDocumento, emitirTextoEditor, selecionarDocumento } from "./socket/socket-front-documento.js";
 const tituloDocumento = document.getElementById("titulo-documento");
+const excluirDocumento = document.getElementById("excluir-documento");
 
 const parametros = new URLSearchParams(window.location.search);
 const nomeDocumento = parametros.get("nome");
@@ -16,6 +17,10 @@ textoEditor.addEventListener("keyup", () => {
         texto: textoEditor.value,
         nomeDocumento
     });
+});
+
+excluirDocumento.addEventListener("click", () => {
+    emitirExcluirDocumento(nomeDocumento);
 });
 
 export function atualizaTextoEditor(texto) {

@@ -7,3 +7,17 @@ socket.emit("obter_documentos", (listaDocumentos) => {
         inserirLinkDocumento(documento.nome);
     });
 });
+
+function emitirDocumento(documento) {
+    socket.emit("gravarDocumento", documento);
+};
+
+socket.on("adicionar_documento_interface", (documento) => {
+    inserirLinkDocumento(documento);
+});
+
+socket.on("documento_existente", (nomeDocumento) => {
+    alert(`O documento ${nomeDocumento} já existe`);
+});
+
+export { emitirDocumento };
