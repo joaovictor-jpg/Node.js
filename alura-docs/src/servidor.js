@@ -3,6 +3,7 @@ import url from 'url';
 import path from 'path';
 import http from 'http';
 import { Server } from 'socket.io';
+import "./db/dbConnection.js";
 
 const app = express();
 
