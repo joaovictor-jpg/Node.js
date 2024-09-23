@@ -26,3 +26,10 @@ excluirDocumento.addEventListener("click", () => {
 export function atualizaTextoEditor(texto) {
     textoEditor.value = texto;
 };
+
+export function alertaERedirecionar(nome) {
+    if (nomeDocumento === nome) {
+        alert(`Documento ${nomeDocumento} foi excluído!`);
+        window.location.href = "/";
+    }
+}
