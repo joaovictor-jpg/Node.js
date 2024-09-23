@@ -1,8 +1,12 @@
-import { atualizaDocumento, encontrarDocumento } from "../db/documentodb.js";
+import { atualizaDocumento, encontrarDocumento, obterDocumentos } from "../db/documentodb.js";
 import io from "../servidor.js";
 
 io.on("connection", (socket) => {
-    console.log('Uma pessoa se connectou! ID:', socket.id);
+
+    socket.on("obter_documentos", async (devolverDocumentos) => {
+        const documentos = await obterDocumentos();
+        devolverDocumentos(documentos);
+    });
 
     socket.on("selecionar_documento", async (nomeDocumento, devolveTexto) => {
         socket.join(nomeDocumento);
