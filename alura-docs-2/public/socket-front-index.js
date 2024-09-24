@@ -1,6 +1,11 @@
 import { inserirLinkDocumento, removerLinkDocumento } from "./index.js";
+import { obterCookie } from "./utils/cookies.js";
 
-const socket = io("http://localhost:3000");
+const socket = io("/usuarios", {
+  auth: {
+    token: obterCookie("tokenJwt")
+  }
+});
 
 socket.emit("obter_documentos", (documentos) => {
   documentos.forEach((documento) => {
@@ -10,7 +15,12 @@ socket.emit("obter_documentos", (documentos) => {
 
 function emitirAdicionarDocumento(nome) {
   socket.emit("adicionar_documento", nome);
-}
+};
+
+socket.on("connect_error", (erro) => {
+  alert(erro);
+  window.location.href = "/login/index.html";
+});
 
 socket.on("adicionar_documento_interface", (nome) => {
   inserirLinkDocumento(nome);
