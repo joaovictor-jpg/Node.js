@@ -4,7 +4,7 @@ function emitirAutenticarUsuario(dados) {
     socket.emit("autenticar_usuario", dados);
 };
 
-socket.on("autenticacao_sucesso", () => {
+socket.on("autenticacao_sucesso", (token) => {
     alert("Usuário autenticado com sucesso!");
     window.location.href = "/";
 });

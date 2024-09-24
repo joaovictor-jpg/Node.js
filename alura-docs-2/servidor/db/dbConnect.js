@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const Cliente = new MongoClient("mongodb+srv://admin:admin123456@aluracluster.4rckx.mongodb.net/?retryWrites=true&w=majority&appName=aluraCluster");
+const Cliente = new MongoClient(process.env.STRING_CONNECTION);
 
 let documentosColecao;
 let usuarioscollection;

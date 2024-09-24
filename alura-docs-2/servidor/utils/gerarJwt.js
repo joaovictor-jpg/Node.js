@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 function gerarJwt(payload) {
-    const tokenJwt = jwt.sign(payload, "segredosupersecreto", {
+    const tokenJwt = jwt.sign(payload, process.env.SEGREDO_JWT, {
         expiresIn: "1h"
     });
 
