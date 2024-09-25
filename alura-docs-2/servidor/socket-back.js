@@ -11,8 +11,8 @@ const nspUsuarios = io.of("/usuarios");
 nspUsuarios.use(autorizarUsuario);
 
 nspUsuarios.on("connection", (socket) => {
-  registrarEventosInicio(socket, io);
-  registrarEventosDocumentos(socket, io);
+  registrarEventosInicio(socket, nspUsuarios);
+  registrarEventosDocumentos(socket, nspUsuarios);
 });
 
 io.of("/").on("connection", (socket) => {
