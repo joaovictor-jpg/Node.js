@@ -1,16 +1,20 @@
 import globals from "globals";
 
-
-
 import pluginJs from "@eslint/js";
 
-
-
-
-
-
-
 export default [
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -18,7 +22,31 @@ export default [
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     languageOptions: {
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -26,7 +54,31 @@ export default [
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
         ...globals.browser,
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -34,11 +86,47 @@ export default [
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
       },
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     },
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -46,7 +134,31 @@ export default [
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
       indent: ["error", 2],
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -54,7 +166,31 @@ export default [
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
       quotes: ["error", "double"],
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -62,7 +198,31 @@ export default [
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     },
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -70,7 +230,31 @@ export default [
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
   pluginJs.configs.recommended,
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
