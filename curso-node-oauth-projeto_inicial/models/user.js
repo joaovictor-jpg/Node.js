@@ -1,4 +1,4 @@
-const getDb = require('../util/database.js');
+const { getDb } = require('../util/database.js');
 
 class User {
     constructor(username, email, password) {
@@ -9,6 +9,7 @@ class User {
 
     async save() {
         const db = getDb();
+        return db.collection('users').insertOne(this);
     }
 };
 
