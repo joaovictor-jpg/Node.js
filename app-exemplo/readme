@@ -1,0 +1,20 @@
+# Trabalhando com docker
+
+Neste projeto, desenvolvi uma aplicação web utilizando Docker, Express, HTML, CSS e JavaScript, com o objetivo de facilitar a implantação e a gestão de ambientes de desenvolvimento. O uso do Docker proporciona um ambiente isolado e consistente, garantindo que a aplicação funcione da mesma forma em diferentes máquinas.
+
+## Tech Stack
+
+<!--- # "Verify icons availability here https://github.com/tandpfun/skill-icons" -->
+
+[![My Skills](https://skillicons.dev/icons?i=js,express,dockerd)](https://skillicons.dev)
+
+## Getting Started
+
+1. **Install Dependencies**: `npm install or yarn`
+2. **Create containers**: `docker-compose up -d`
+5. **Start Developing**: `npm run dev (projeto)`
+
+## Contribute
+
+1. **Clone project**: `git clone https://github.com/joaovictor-jpg/Node.js.git`
+2. **Create feature/branch**: `git checkout -b feature/NAME`
