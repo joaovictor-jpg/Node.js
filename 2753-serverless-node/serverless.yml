@@ -8,6 +8,8 @@ params:
     dbName: alura-serverless
   dev:
     connectionString: mongodb://localhost:27017/${self:params.default.dbName}
+    salt: SJxV9oNKRtEks8un3W3jUZSkHwrxBOdZ
+    jwtSecrete: 51d499686baf4bf722c275bc89dfd2c3f07fa6c9daa52aaf0d10ed31df277c59
   prod:
 
 provider:
@@ -16,6 +18,9 @@ provider:
   environment:
     MONGODB_CONNECTIONSTRING: ${param:connectionString}
     MONGODB_DB_NAME: ${param:dbName}
+    SALT: ${param:salt}
+    JWT_TOKEN: ${param.jwtSecrete}
+    
 
 functions:
   sendResponse:
@@ -33,6 +38,15 @@ functions:
       - httpApi:
           path: /api/results/{id}
           method: get
+  login:
+    handler: api/index.login
+    events:
+      - httpApi:
+          path: /api/login
+          method: post
+          request:
+            schemas:
+              application/json: ${file(./schemas/login.json)}
 
 plugins:
   - serverless-offline
