@@ -1,31 +1,9 @@
 "use strict";
 
-const { pbkdf2Sync } = require('crypto');
-const { sign, verify } = require('jsonwebtoken');
 const { buildResponse } = require('./utils.js');
 const { getUserByCredential, saveResultsToDatabase, getResultById } = require('./database.js');
-
-async function authorize(event) {
-  const { authorization } = event.headers
-  if (!authorization) {
-    return buildResponse(401, { error: 'Missing authorization header' });
-  }
-
-  const [type, token] = authorization.split(' ')
-  if (type !== 'Bearer' || !token) {
-    return buildResponse(401, { error: 'Unsuported authorization type' })
-  }
-
-  const decodedToken = verify(token, process.env.JWT_TOKEN, {
-    audience: 'alura-serverless'
-  })
-
-  if (!decodedToken) {
-    return buildResponse(401, { error: 'Invalid Token' })
-  }
-
-  return decodedToken;
-}
+const { createToken, authorize, makeHash } = require('./auth.js');
+const countCorrectAnswers = require('./response.js');
 
 function extractBody(event) {
   if (!event?.body) {
@@ -40,7 +18,7 @@ function extractBody(event) {
 module.exports.login = async (event) => {
   const { username, password } = extractBody(event)
 
-  const hashedPass = pbkdf2Sync(password, process.env.SALT, 100000, 64, 'sha512').toString('hex')
+  const hashedPass = makeHash(password);
 
   const user = await getUserByCredential(username, hashedPass);
 
@@ -50,9 +28,9 @@ module.exports.login = async (event) => {
     })
   }
 
-  const token = sign({ username, id: user._id }, process.env.JWT_TOKEN, { expiresIn: '24h', audience: 'alura-serverless' })
+  const token = createToken(user.username, user._id);
 
-  return buildResponse(200, { token }, )
+  return buildResponse(200, { token },)
 }
 
 module.exports.sendResponse = async (event) => {
@@ -61,22 +39,9 @@ module.exports.sendResponse = async (event) => {
 
   if (authResult.statusCode === 401) return authResult;
 
-  const correctQuestions = [3, 1, 0, 2]
-
   const { name, answers } = extractBody(event)
-  const totalCorrectAnswers = answers.reduce((acc, answer, index) => {
-    if (answer === correctQuestions[index]) {
-      acc++
-    }
-    return acc
-  }, 0)
 
-  const result = {
-    name,
-    answers,
-    totalCorrectAnswers,
-    totalAnswers: answers.length
-  }
+  const result = countCorrectAnswers(name, answers)
 
   const insertedId = await saveResultsToDatabase(result);
 
