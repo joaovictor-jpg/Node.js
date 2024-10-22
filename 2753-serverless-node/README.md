@@ -1,27 +1,30 @@
 # Node.js com serverless framework
-
-> Este é o projeto de exemplo para o curso [Node.js com serverless framework](tbd) na Alura.
-
-Este projeto tem como objetivo guiar seu aprendizado durante o curso, e para isso, ele está dividido em branches, cada um com um objetivo diferente. Cada branch representa um passo do curso, e você pode navegar entre elas para ver o código de cada etapa.
-
-Além disso, existem dois branches: `completo-vm` e `completo-serverless`, cada um com sua própria documentação, que contém os códigos completos do projeto em cada um dos ambientes que ele está rodando.
+Este projeto foi desenvolvido para consolidar meus conhecimentos em AWS Lambda e Serverless, utilizando todo o aprendizado adquirido no curso da Alura.
 
 ## Executando localmente
 
-O projeto foi feito da forma mais simples possível para facilitar o uso. Não foram usados nenhum framework ou biblioteca para o front-end.
-
-Todo o projeto roda a partir do arquivo `index.mjs`, que é o arquivo principal do projeto. Para executá-lo, basta rodar o comando:
-
-```bash
-node index.mjs
-```
-
-Ou se preferir, você pode usar o [nodemon](https://www.npmjs.com/package/nodemon) para executar o projeto:
+O projeto foi desenvolvido da maneira mais simples possível para facilitar sua utilização. Nenhum framework ou biblioteca foi empregado no front-end.
+Todo o funcionamento do projeto se baseia no arquivo serverless.yaml e no index.js, que é o arquivo principal. Para executá-lo, você precisará ter uma conta na:
+- AWS
+- Serverless
+- Configuração do Serverless localmente
+Para as configurações:
 
 ```bash
-npm run dev
+npm i -g serverless
+serverless --console
+sls login
+sls config credentials --provider aws
+sls --org=<sua-org-no-serverless>
+AWS - Node.js - HTTP API
 ```
 
-Isso vai garantir que você não precise ficar reiniciando o servidor a cada alteração que fizer. Todo o front-end da aplicação está na pasta `interface`, toda a API da aplicação está dentro do arquivo `index.mjs`.
+Para executar seu projeto localmente depois das configurações executar o comando:
 
-Depois de executar o projeto, você pode acessar a aplicação em `http://localhost:3000`.
+```bash
+sls offline
+```
+
+Isso vai garantir que você não precise ficar reiniciando o servidor a cada alteração que fizer. Todo o front-end da aplicação está na pasta `interface`, toda a API da aplicação está dentro do arquivo `serverless`.
+
+Depois de executar o projeto, você pode acessar a aplicação
