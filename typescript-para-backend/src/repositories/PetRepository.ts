@@ -1,8 +1,8 @@
 import { Repository } from "typeorm";
 import InterfacePetRepository from "./interfaces/InterfacePetRepository";
 import PetEntity from "../entity/PetEntity";
-import AdotanteRepository from "./AdotanteRepository";
 import AdotanteEntity from "../entity/AdotanteEntity";
+import EnumPorte from "../enum/EnumPorte";
 
 export default class PetRepository implements InterfacePetRepository {
     private repository: Repository<PetEntity>;
@@ -74,6 +74,16 @@ export default class PetRepository implements InterfacePetRepository {
         pet.adotado = true;
         await this.repository.save(pet);
         return { success: true }
+    }
+
+    async buscarPetPeloPorte(porte: EnumPorte): Promise<PetEntity[]> {
+        const pets = await this.repository.find({ where: { porte } });
+        return pets;
+    }
+
+    async buscarPetPorCampoGenerico<Tipo extends keyof PetEntity>(campo: Tipo, valor: PetEntity[Tipo]): Promise<PetEntity[]> {
+        const pets = await this.repository.find({where: {[campo]:valor}});
+        return pets;
     }
 
 }

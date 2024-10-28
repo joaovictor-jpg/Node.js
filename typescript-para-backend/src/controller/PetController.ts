@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import EnumEspecie from "../enum/EnumEspecies.js";
 import PetRepository from "../repositories/PetRepository.js";
 import PetEntity from "../entity/PetEntity.js";
+import EnumPorte from "../enum/EnumPorte.js";
 
 let id = 0;
 function geraId() {
@@ -13,12 +14,20 @@ export default class PetController {
     constructor(private repository: PetRepository) { }
 
     async criaPet(req: Request, res: Response) {
-        const { nome, especie, adotado, dataDeNascimento } = <PetEntity>req.body;
+        const { nome, especie, porte, adotado, dataDeNascimento } = <PetEntity>req.body;
+
         if (!Object.values(EnumEspecie).includes(especie)) {
             return res.status(400).json({ error: "Especie inválida" });
         }
-        const novoPet = new PetEntity(nome, especie, dataDeNascimento, adotado);
+
+        if (porte && !(porte in EnumPorte)) {
+            return res.status(400).json({ error: "Porte é invalido" });
+        }
+
+        const novoPet = new PetEntity(nome, especie, dataDeNascimento, adotado, porte);
+
         await this.repository.criaPet(novoPet);
+
         return res.status(201).json(novoPet);
     }
 
@@ -57,5 +66,21 @@ export default class PetController {
             return res.status(404).json({ message });
         }
         return res.sendStatus(204);
+    }
+
+    async buscarPetPeloPorte(req: Request, res: Response) {
+        const { porte } = req.query;
+
+        const pets = await this.repository.buscarPetPeloPorte(porte as EnumPorte);
+
+        return res.status(200).json(pets);
+    }
+
+    async buscaPorCampoGenerico(req: Request, res: Response) {
+        const {campo, valor} = req.query;
+
+        const listaDePet = await this.repository.buscarPetPorCampoGenerico(campo as keyof PetEntity, valor as string);
+
+        return res.status(200).json(listaDePet);
     }
 }
