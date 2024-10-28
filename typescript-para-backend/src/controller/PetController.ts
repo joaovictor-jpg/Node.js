@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
-import type TipoPet from "../tipos/TiposPet.ts";
 import EnumEspecie from "../enum/EnumEspecies.js";
-
-let listaDePets: Array<TipoPet> = [];
+import PetRepository from "../repositories/PetRepository.js";
+import PetEntity from "../entity/PetEntity.js";
 
 let id = 0;
 function geraId() {
@@ -11,42 +10,43 @@ function geraId() {
 }
 
 export default class PetController {
+    constructor(private repository: PetRepository) { }
+
     criaPet(req: Request, res: Response) {
-        const { nome, especie, adotado, dataDeNascimento } = <TipoPet>req.body;
+        const { nome, especie, adotado, dataDeNascimento } = <PetEntity>req.body;
         if (!Object.values(EnumEspecie).includes(especie)) {
             return res.status(400).json({ error: "Especie inválida" });
         }
-        const novoPet: TipoPet = { id: geraId(), nome, especie, adotado, dataDeNascimento }
-        listaDePets.push(novoPet);
+        const novoPet: PetEntity = { id: geraId(), nome, especie, adotado, dataDeNascimento }
+        this.repository.criaPet(novoPet);
         return res.status(201).json(novoPet);
     }
 
-    listaPet(req: Request, res: Response) {
-        return res.status(200).json(listaDePets);
+    async listaPet(req: Request, res: Response) {
+        const listaPet: Array<PetEntity> = await this.repository.listaPet();
+        return res.status(200).json(listaPet);
     }
 
-    atualizarPet(req: Request, res: Response) {
+    async atualizarPet(req: Request, res: Response) {
         const { id } = req.params;
-        const { nome, especie, adotado, dataDeNascimento } = req.body as TipoPet;
-        const pet: TipoPet = listaDePets.find((pet) => pet.id === Number(id));
-        if (!pet) {
-            return res.status(404).json({ erro: "Pet não encontrado" });
+
+        const { success, message } = await this.repository.atualizarPet(Number(id), req.body as PetEntity);
+
+        if (!success) {
+            return res.status(404).json({ message });
         }
-        pet.nome = nome;
-        pet.especie = especie;
-        pet.adotado = adotado;
-        pet.dataDeNascimento = dataDeNascimento;
-        return res.status(200).json(pet);
+
+        return res.sendStatus(204);
     }
 
-    delete(req: Request, res: Response) {
+    async delete(req: Request, res: Response) {
         const { id } = req.params;
-        const pet: TipoPet = listaDePets.find((pet) => pet.id === Number(id));
-        if (!pet) {
-            return res.status(404).json({ error: "Pet não encontrado" });
+        const { success, message } = await this.repository.deletePet(Number(id));
+
+        if (!success) {
+            return res.status(404).json({ message });
         }
-        const index = listaDePets.indexOf(pet);
-        listaDePets.splice(index, 1);
-        return res.status(200).json({ message: "Pet deletado com sucesso" });
+
+        return res.sendStatus(204);
     }
 }
