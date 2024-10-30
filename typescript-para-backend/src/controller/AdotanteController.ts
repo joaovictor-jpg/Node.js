@@ -14,9 +14,8 @@ export default class AdotanteController {
 
             await this.repository.criaAdotante(novoAdotante);
 
-            return res.status(201).json({ data: { id: novoAdotante.id, nome, celular } });
+            return res.status(201).json({ data: { id: novoAdotante.id, nome, celular, endereco } });
         } catch (error) {
-            console.log(error);
             return res.status(500).json({ error: "Error ao criar o adotante" });
         }
     }
@@ -27,7 +26,8 @@ export default class AdotanteController {
             return {
                 id: adotante.id,
                 nome: adotante.nome,
-                celular: adotante.celular
+                celular: adotante.celular,
+                endereco: adotante.endereco !== null? adotante.endereco : undefined
             }
         })
         return res.status(200).json({ data });
@@ -59,10 +59,10 @@ export default class AdotanteController {
         return res.sendStatus(204);
     }
 
-    async atualizaEnderecoAdotante(req: Request<TipoRequestAdotanteParams, {}, TipoRequestAdotanteBody>, res: Response<TipoResponseAdotanteBody>) {
+    async atualizaEnderecoAdotante(req: Request<TipoRequestAdotanteParams, {}, EnderecoEntity>, res: Response<TipoResponseAdotanteBody>) {
         const { id } = req.params;
 
-        const { success, message } = await this.repository.atualizaEnderecoAdotante(Number(id), req.body.endereco as EnderecoEntity);
+        const { success, message } = await this.repository.atualizaEnderecoAdotante(Number(id), req.body);
 
         if (!success) {
             return res.status(404).json({ error: message });
