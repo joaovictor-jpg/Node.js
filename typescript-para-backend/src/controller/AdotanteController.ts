@@ -14,15 +14,15 @@ export default class AdotanteController {
 
             await this.repository.criaAdotante(novoAdotante);
 
-            return res.status(201).json({ data: { id: novoAdotante.id, nome, celular, endereco } });
+            return res.status(201).json({ dados: { id: novoAdotante.id, nome, celular, endereco } });
         } catch (error) {
-            return res.status(500).json({ error: "Error ao criar o adotante" });
+            return res.status(500).json({ erros: "Error ao criar o adotante" });
         }
     }
 
     async listaAdotante(_: Request<{}, {}, TipoRequestAdotanteBody>, res: Response<TipoResponseAdotanteBody>) {
         const listaAdotante = await this.repository.listaAdotante();
-        const data = listaAdotante.map((adotante) => {
+        const dados = listaAdotante.map((adotante) => {
             return {
                 id: adotante.id,
                 nome: adotante.nome,
@@ -30,7 +30,7 @@ export default class AdotanteController {
                 endereco: adotante.endereco !== null? adotante.endereco : undefined
             }
         })
-        return res.status(200).json({ data });
+        return res.status(200).json({ dados });
     }
 
     async atualizarAdotante(req: Request<TipoRequestAdotanteParams, {}, TipoRequestAdotanteBody>, res: Response<TipoResponseAdotanteBody>) {
@@ -41,7 +41,7 @@ export default class AdotanteController {
         const { success, message } = await this.repository.atualizaAdotanteEntity(Number(id), adotante);
 
         if (!success) {
-            return res.status(404).json({ error: message });
+            return res.status(404).json({ erros: message });
         }
 
         return res.sendStatus(204);
@@ -53,7 +53,7 @@ export default class AdotanteController {
         const { success, message } = await this.repository.deletaAdotante(Number(id));
 
         if (!success) {
-            return res.status(204).json({ error: message });
+            return res.status(204).json({ erros: message });
         }
 
         return res.sendStatus(204);
@@ -65,7 +65,7 @@ export default class AdotanteController {
         const { success, message } = await this.repository.atualizaEnderecoAdotante(Number(id), req.body);
 
         if (!success) {
-            return res.status(404).json({ error: message });
+            return res.status(404).json({ erros: message });
         }
 
         return res.sendStatus(204);

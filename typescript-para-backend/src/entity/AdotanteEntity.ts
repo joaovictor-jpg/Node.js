@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import EnderecoEntity from "./Endereco";
 import PetEntity from "./PetEntity";
+import { senhaCriptoGrafada } from "../utils/senhaCriptoGrafada";
 
 @Entity()
 export default class AdotanteEntity {
@@ -30,5 +31,11 @@ export default class AdotanteEntity {
         this.celular = celular;
         this.foto = foto;
         this.endereco = endereco;
+    }
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    private async criptografaSenha(senha: string) {
+        this.senha = senhaCriptoGrafada(this.senha);
     }
 }

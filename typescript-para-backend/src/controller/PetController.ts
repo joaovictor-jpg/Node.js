@@ -11,33 +11,25 @@ export default class PetController {
     async criaPet(req: Request<TipoRequestPetParams, {}, TipoRequestPetBody>, res: Response<TipoResponsePetBody>) {
         const { nome, especie, porte, adotado, dataDeNascimento } = <PetEntity>req.body;
 
-        if (!Object.values(EnumEspecie).includes(especie)) {
-            return res.status(400).json({ error: "Especie inválida" });
-        }
-
-        if (porte && !(porte in EnumPorte)) {
-            return res.status(400).json({ error: "Porte é invalido" });
-        }
-
         const novoPet = new PetEntity(nome, especie, dataDeNascimento, adotado, porte);
 
         await this.repository.criaPet(novoPet);
 
-        return res.status(201).json({ data: { id: novoPet.id, nome, porte, especie } });
+        return res.status(201).json({ dados: { id: novoPet.id, nome, porte, especie } });
     }
 
     async listaPet(req: Request<TipoRequestPetParams, {}, TipoRequestPetBody>, res: Response<TipoResponsePetBody>) {
         const listaPet: Array<PetEntity> = await this.repository.listaPet();
-        const data = listaPet.map((pet) => {
+        const dados = listaPet.map((pet) => {
             return {
                 id: pet.id,
                 nome: pet.nome,
-                porte: pet.porte,
+                porte: pet.porte !== null ? pet.porte : undefined,
                 especie: pet.especie
             }
 
         })
-        return res.status(200).json({ data });
+        return res.status(200).json({ dados });
     }
 
     async atualizarPet(req: Request<TipoRequestPetParams, {}, TipoRequestPetBody>, res: Response<TipoResponsePetBody>) {
@@ -46,7 +38,7 @@ export default class PetController {
         const { success, message } = await this.repository.atualizarPet(Number(id), req.body as PetEntity);
 
         if (!success) {
-            return res.status(404).json({ error: message });
+            return res.status(404).json({ erros: message });
         }
 
         return res.sendStatus(204);
@@ -57,7 +49,7 @@ export default class PetController {
         const { success, message } = await this.repository.deletePet(Number(id));
 
         if (!success) {
-            return res.status(404).json({ error: message });
+            return res.status(404).json({ erros: message });
         }
 
         return res.sendStatus(204);
@@ -67,7 +59,7 @@ export default class PetController {
         const { pet_id, adotado_id } = req.params;
         const { success, message } = await this.repository.adotaPe(Number(pet_id), Number(adotado_id));
         if (!success) {
-            return res.status(404).json({ error: message });
+            return res.status(404).json({ erros: message });
         }
         return res.sendStatus(204);
     }
@@ -77,7 +69,7 @@ export default class PetController {
 
         const pets = await this.repository.buscarPetPeloPorte(porte as EnumPorte);
 
-        const data = pets.map((pet) => {
+        const dados = pets.map((pet) => {
             return {
                 id: pet.id,
                 nome: pet.nome,
@@ -86,7 +78,7 @@ export default class PetController {
             }
         });
 
-        return res.status(200).json({ data });
+        return res.status(200).json({ dados });
     }
 
     async buscaPorCampoGenerico(req: Request, res: Response) {
