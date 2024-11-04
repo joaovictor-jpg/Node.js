@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import EnumEspecie from "../enum/EnumEspecies.js";
 import PetRepository from "../repositories/PetRepository.js";
 import PetEntity from "../entity/PetEntity.js";
 import EnumPorte from "../enum/EnumPorte.js";
@@ -34,12 +33,7 @@ export default class PetController {
 
     async atualizarPet(req: Request<TipoRequestPetParams, {}, TipoRequestPetBody>, res: Response<TipoResponsePetBody>) {
         const { id } = req.params;
-
-        const { success, message } = await this.repository.atualizarPet(Number(id), req.body as PetEntity);
-
-        if (!success) {
-            return res.status(404).json({ erros: message });
-        }
+        await this.repository.atualizarPet(Number(id), req.body as PetEntity);
 
         return res.sendStatus(204);
     }
