@@ -11,6 +11,7 @@ import {
 
 export default class AdotanteController {
   constructor(private repository: AdotanteRepository) { }
+
   async criaAdotante(req: Request<TipoRequestParamsAdotante, {}, TipoRequestBodyAdotante>, res: Response<TipoResponseBodyAdotante>) {
     const { nome, celular, endereco, foto, senha } = <AdotanteEntity>req.body;
 
@@ -27,6 +28,7 @@ export default class AdotanteController {
       .status(201)
       .json({ dados: { id: novoAdotante.id, nome, celular, endereco } });
   }
+  
   async atualizaAdotante(req: Request<TipoRequestParamsAdotante, {}, TipoRequestBodyAdotante>, res: Response<TipoResponseBodyAdotante>) {
     const { id } = req.params;
 

@@ -30,8 +30,6 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     Object.assign(adotanteToUpdate, newData);
 
     await this.repository.save(adotanteToUpdate);
-
-    return { success: true };
   }
 
   async deletaAdotante(id: number) {
@@ -42,8 +40,6 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     }
 
     await this.repository.remove(adotanteToRemove);
-
-    return { success: true };
   }
 
   async atualizaEnderecoAdotante(idAdotante: number, endereco: EnderecoEntity) {
@@ -58,6 +54,5 @@ export default class AdotanteRepository implements InterfaceAdotanteRepository {
     const novoEndereco = new EnderecoEntity(endereco.cidade, endereco.estado);
     adotante.endereco = novoEndereco;
     await this.repository.save(adotante);
-    return { success: true };
   }
 }

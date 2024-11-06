@@ -9,10 +9,11 @@ const tratarErrorValidacaoYup = (esquema: yup.Schema<unknown>, req: Request, res
         const errorsYup = erros as yup.ValidationError;
         const errosDeValidacao: Record<string, string> = {};
         errorsYup.inner.forEach((erro) => {
-            if(erro.path) {
+            if (erro.path) {
                 errosDeValidacao[erro.path] = erro.message;
             }
-        })
+        });
+        res.status(400).json({errors: errosDeValidacao});
     }
 };
 

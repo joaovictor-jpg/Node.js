@@ -12,6 +12,7 @@ import {
 export default class PetController {
   constructor(private repository: PetRepository) { }
   async criaPet(req: Request<TipoRequestParamsPet, {}, TipoRequestBodyPet>, res: Response<TipoResponseBodyPet>) {
+    console.log("Hello World");
     const { adotado, especie, dataDeNascimento, nome, porte } = <PetEntity>(
       req.body
     );
@@ -25,9 +26,7 @@ export default class PetController {
     );
 
     await this.repository.criaPet(novoPet);
-    return res
-      .status(201)
-      .json({ dados: { id: novoPet.id, nome, especie, porte } });
+    return res.status(201).json({ dados: { id: novoPet.id, nome, especie, porte } });
   }
 
   async listaPet(req: Request<TipoRequestParamsPet, {}, TipoRequestBodyPet>, res: Response<TipoResponseBodyPet>) {
