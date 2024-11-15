@@ -1,32 +1,33 @@
+import {
+  Entity,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
+@Entity({ name: 'usuarios' })
 export class UsuarioEntity {
-  constructor(
-    private _id: string,
-    private _nome: string,
-    private _email: string,
-    private _senha: string,
-  ) {}
+  @PrimaryGeneratedColumn('uuid')
+  public id: string;
+  @Column({ name: 'nome', length: 100, nullable: false })
+  public nome: string;
+  @Column({ name: 'email', length: 70, nullable: false })
+  public email: string;
+  @Column({ name: 'senha', length: 255, nullable: false })
+  public senha: string;
+  @CreateDateColumn({ name: 'created_at' })
+  public createdAt: string;
+  @UpdateDateColumn({ name: 'update_at' })
+  public updatedAt: string;
+  @DeleteDateColumn({ name: 'deleted_at' })
+  public deletedAt: string;
 
-  get id(): string {
-    return this._id;
-  }
-
-  get nome(): string {
-    return this._nome;
-  }
-
-  get email(): string {
-    return this._email;
-  }
-
-  set nome(nome: string) {
-    this._nome = nome;
-  }
-
-  set email(email: string) {
-    this._email = email;
-  }
-
-  set senha(senha: string) {
-    this._senha = senha;
+  constructor(id: string, nome: string, email: string, senha: string) {
+    this.id = id;
+    this.nome = nome;
+    this.email = email;
+    this.senha = senha;
   }
 }

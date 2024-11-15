@@ -12,14 +12,18 @@ import { CriaProdutoDTO } from './dto/cria-produto.dto';
 import { ProdutoEntity } from './produto.entity';
 import { v4 as uuid } from 'uuid';
 import { AtualizaProdutoDTO } from './dto/atualiza-produto-dto';
+import { ProdutoService } from './produto.service';
 
 @Controller('/produtos')
 export class ProdutoController {
-  constructor(private produtoRepository: ProdutoRepository) {}
+  constructor(
+    private readonly produtoRepository: ProdutoRepository,
+    private readonly produtoService: ProdutoService,
+  ) {}
 
   @Get()
   public async lista(): Promise<ReadonlyArray<ProdutoEntity>> {
-    return this.produtoRepository.listaProdutor();
+    return this.produtoService.listaProdutos();
   }
 
   @Post()
@@ -33,13 +37,9 @@ export class ProdutoController {
       produto.quantidadeDisponivel,
       produto.descricao,
       produto.categoria,
-      produto.dataCriacao,
-      produto.dataAtualizacao,
-      produto.caracteristicas,
-      produto.imagens,
       produto.usuarioId,
     );
-    this.produtoRepository.cadastrarProduto(produtoNovo);
+    this.produtoService.criaProduto(produtoNovo);
     return produtoNovo;
   }
 
@@ -47,17 +47,16 @@ export class ProdutoController {
   public async atualizarProduto(
     @Param('id') id: string,
     @Body() dadosAtualizados: AtualizaProdutoDTO,
-  ): Promise<ProdutoEntity> {
-    const produto = await this.produtoRepository.atualizaProduto(
-      id,
-      dadosAtualizados,
-    );
-    return produto;
+  ): Promise<string> {
+    await this.produtoService.atualizaProduito(id, dadosAtualizados);
+    return `Produto com id: ${id}, foi atualizado com sucesso`;
   }
 
   @Delete('/:id')
-  public async deletaProduto(@Param('id') id: string) {
-    const produtoDeletado = await this.produtoRepository.removerProduto(id);
-    return produtoDeletado;
+  public async deletaProduto(@Param('id') id: string): Promise<any> {
+    await this.produtoService.deletaUProduto(id);
+    return {
+      messagem: `Produto com id: ${id}, foi deletado com sucesso`,
+    };
   }
 }

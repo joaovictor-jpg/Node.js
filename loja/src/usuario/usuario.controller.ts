@@ -13,10 +13,14 @@ import { UsuarioEntity } from './usuario.entity';
 import { v4 as uuid } from 'uuid';
 import { ListaUsuarioDTO } from './dto/lista-usuario.dto';
 import { AtualizaUsuarioDTO } from './dto/atualiza-usuario.dto';
+import { UsuarioService } from './usuario.service';
 
 @Controller('/usuarios')
 export class UsuarioController {
-  constructor(private usuarioRepository: UsuarioRepository) {}
+  constructor(
+    private usuarioRepository: UsuarioRepository,
+    private usuarioService: UsuarioService,
+  ) {}
 
   @Post()
   async criaUsuario(@Body() dadosDoUsuario: UsuarioDTO) {
@@ -26,7 +30,7 @@ export class UsuarioController {
       dadosDoUsuario.email,
       dadosDoUsuario.senha,
     );
-    this.usuarioRepository.salvar(usuarioEntity);
+    this.usuarioService.criaUsuario(usuarioEntity);
     return {
       usuario: new ListaUsuarioDTO(usuarioEntity.id, usuarioEntity.nome),
       message: 'Usuário cadastrado com sucesso',
@@ -34,13 +38,10 @@ export class UsuarioController {
   }
 
   @Get()
-  async listaUsuario() {
-    const usuarios = await this.usuarioRepository.listar();
-    const listaDeUsuarios = usuarios.map(
-      (usuario) => new ListaUsuarioDTO(usuario.id, usuario.nome),
-    );
+  async listaUsuario(): Promise<ListaUsuarioDTO[]> {
+    const usuarios = await this.usuarioService.listaUsuario();
 
-    return listaDeUsuarios;
+    return usuarios;
   }
 
   @Put('/:id')
@@ -48,29 +49,17 @@ export class UsuarioController {
     @Param('id') id: string,
     @Body() dadosAtualizados: AtualizaUsuarioDTO,
   ) {
-    const usuarioAtualizado = await this.usuarioRepository.atualizarUsuario(
-      id,
-      dadosAtualizados,
-    );
+    await this.usuarioService.atualizaUsuario(id, dadosAtualizados);
     return {
-      usuario: new ListaUsuarioDTO(
-        usuarioAtualizado.id,
-        usuarioAtualizado.nome,
-      ),
+      usuario: new ListaUsuarioDTO(id, dadosAtualizados.nome),
       message: 'Usuário atualizado com sucesso!',
     };
   }
 
   @Delete('/:id')
   async deletarUsuario(@Param('id') id: string) {
-    const usuarioDeletado = await this.usuarioRepository.deletaUsuario(id);
+    await this.usuarioService.deletaUsuario(id);
 
-    return {
-      'Usuario Deletado': new ListaUsuarioDTO(
-        usuarioDeletado.id,
-        usuarioDeletado.nome,
-      ),
-      message: 'Usuário deletado com sucesso',
-    };
+    return { message: 'Usuário deletado com sucesso' };
   }
 }
