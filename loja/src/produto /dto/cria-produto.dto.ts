@@ -1,6 +1,5 @@
 import {
   IsArray,
-  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsPositive,
@@ -45,10 +44,4 @@ export class CriaProdutoDTO {
   @IsString()
   @IsNotEmpty()
   categoria: string;
-  @IsNotEmpty()
-  @IsDateString()
-  dataCriacao: Date;
-  @IsNotEmpty()
-  @IsDateString()
-  dataAtualizacao: Date;
 }
