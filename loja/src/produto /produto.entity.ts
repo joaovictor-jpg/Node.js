@@ -18,7 +18,7 @@ export class ProdutoEntity {
   nome: string;
   @Column({ name: 'valor', nullable: false })
   valor: number;
-  @Column({ name: 'quantidade', nullable: false })
+  @Column({ name: 'quantidade_disponivel', nullable: false })
   quantidadeDisponivel: number;
   @Column({ name: 'descricao', length: 250, nullable: false })
   descricao: string;
@@ -30,8 +30,6 @@ export class ProdutoEntity {
   updatedAt: string;
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: string;
-  @Column({ name: 'usuario_id', length: 100, nullable: false })
-  usuarioId: string;
   @OneToMany(
     () => ProdutoCarcteristica,
     (produtoCarcteristica) => produtoCarcteristica.produto,

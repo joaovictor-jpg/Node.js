@@ -8,38 +8,25 @@ import {
   Put,
 } from '@nestjs/common';
 import { CriaProdutoDTO } from './dto/cria-produto.dto';
-import { ProdutoEntity } from './produto.entity';
-import { v4 as uuid } from 'uuid';
 import { AtualizaProdutoDTO } from './dto/atualiza-produto-dto';
 import { ProdutoService } from './produto.service';
+import { ListaProdutoDTO } from './dto/lista-produto.dto';
 
 @Controller('/produtos')
 export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}
 
   @Get()
-  public async lista(): Promise<ReadonlyArray<ProdutoEntity>> {
+  public async lista(): Promise<ReadonlyArray<ListaProdutoDTO>> {
     return this.produtoService.listaProdutos();
   }
 
   @Post()
   public async cadastrarProduto(
     @Body() produto: CriaProdutoDTO,
-  ): Promise<ProdutoEntity> {
-    const produtoNovo = new ProdutoEntity();
-
-    produtoNovo.id = uuid();
-    produtoNovo.nome = produto.nome;
-    produtoNovo.usuarioId = produto.usuarioId;
-    produtoNovo.valor = produto.valor;
-    produtoNovo.quantidadeDisponivel = produto.quantidadeDisponivel;
-    produtoNovo.descricao = produto.descricao;
-    produtoNovo.categoria = produto.categoria;
-    produtoNovo.caracteristicas = produto.caracteristicas;
-    produtoNovo.imagens = produto.imagens;
-
-    this.produtoService.criaProduto(produtoNovo);
-    return produtoNovo;
+  ): Promise<ListaProdutoDTO> {
+    const produtoDTO = await this.produtoService.criaProduto(produto);
+    return produtoDTO;
   }
 
   @Put('/:id')
