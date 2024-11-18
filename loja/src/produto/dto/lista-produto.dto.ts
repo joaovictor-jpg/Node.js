@@ -1,14 +1,9 @@
-import { CaracteristicaProdutoDTO } from './caracteristicas-produtos.dto';
-import { ImagemProdutoDTO } from './imagem-produto.dto';
+import { PickType } from '@nestjs/mapped-types';
+import { ProdutoEntity } from '../produto.entity';
+import { ListaImagensDTO } from './lista-imagens.dto';
+import { ListaCaracteristicasProdutosDTO } from './lista-caracteristicas.dto';
 
-export class ListaProdutoDTO {
-  constructor(
-    readonly id: string,
-    readonly nome: string,
-    readonly caracteristicas: Omit<
-      CaracteristicaProdutoDTO,
-      'id' | 'produto'
-    >[],
-    readonly imagens: Omit<ImagemProdutoDTO, 'id' | 'produto'>[],
-  ) {}
+export class ListaProdutoDTO extends PickType(ProdutoEntity, ['id', 'nome']) {
+  caracteristicas: ListaCaracteristicasProdutosDTO[];
+  imagens: ListaImagensDTO[];
 }

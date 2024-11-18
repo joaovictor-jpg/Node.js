@@ -2,6 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from './usuario.entity';
 import { Repository } from 'typeorm';
 import { ListaUsuarioDTO } from './dto/lista-usuario.dto';
+import { NotFoundException } from '@nestjs/common';
 
 export class UsuarioService {
   constructor(
@@ -17,18 +18,46 @@ export class UsuarioService {
     return usuarioLista;
   }
 
+  async buscarPorEmail(email: string): Promise<ListaUsuarioDTO> {
+    const usuario = await this.buscarPorPropriedade('email', email);
+
+    return new ListaUsuarioDTO(usuario.id, usuario.nome);
+  }
+
   async criaUsuario(usuarioEntity: UsuarioEntity): Promise<void> {
-    this.usuarioRepository.save(usuarioEntity);
+    await this.usuarioRepository.save(usuarioEntity);
   }
 
   async atualizaUsuario(
     id: string,
     dadosUsuario: Partial<UsuarioEntity>,
-  ): Promise<void> {
-    await this.usuarioRepository.update(id, dadosUsuario);
+  ): Promise<UsuarioEntity> {
+    const usuario = await this.buscarPorPropriedade('id', id);
+
+    Object.assign(usuario, dadosUsuario);
+
+    await this.usuarioRepository.save(usuario);
+
+    return usuario;
   }
 
   async deletaUsuario(id: string): Promise<void> {
-    await this.usuarioRepository.delete(id);
+    const usuario = await this.buscarPorPropriedade('id', id);
+
+    await this.usuarioRepository.delete(usuario.id);
+  }
+
+  private async buscarPorPropriedade(
+    campo: string,
+    prop: string,
+  ): Promise<UsuarioEntity> {
+    console.log(prop);
+    const usuario = await this.usuarioRepository.findOne({
+      [campo]: prop,
+    });
+
+    if (usuario === null) throw new NotFoundException('Usuário não encontrado');
+
+    return usuario;
   }
 }

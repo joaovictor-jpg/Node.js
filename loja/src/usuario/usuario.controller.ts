@@ -7,7 +7,6 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { UsuarioRepository } from './usuario.repository';
 import { UsuarioDTO } from './dto/cria-usuario.dto';
 import { UsuarioEntity } from './usuario.entity';
 import { v4 as uuid } from 'uuid';
@@ -17,10 +16,7 @@ import { UsuarioService } from './usuario.service';
 
 @Controller('/usuarios')
 export class UsuarioController {
-  constructor(
-    private usuarioRepository: UsuarioRepository,
-    private usuarioService: UsuarioService,
-  ) {}
+  constructor(private usuarioService: UsuarioService) {}
 
   @Post()
   async criaUsuario(@Body() dadosDoUsuario: UsuarioDTO) {
@@ -37,6 +33,11 @@ export class UsuarioController {
     };
   }
 
+  @Get('/:email')
+  async buscarId(@Param('email') email: string): Promise<ListaUsuarioDTO> {
+    return await this.usuarioService.buscarPorEmail(email);
+  }
+
   @Get()
   async listaUsuario(): Promise<ListaUsuarioDTO[]> {
     const usuarios = await this.usuarioService.listaUsuario();
@@ -49,9 +50,12 @@ export class UsuarioController {
     @Param('id') id: string,
     @Body() dadosAtualizados: AtualizaUsuarioDTO,
   ) {
-    await this.usuarioService.atualizaUsuario(id, dadosAtualizados);
+    const usuario = await this.usuarioService.atualizaUsuario(
+      id,
+      dadosAtualizados,
+    );
     return {
-      usuario: new ListaUsuarioDTO(id, dadosAtualizados.nome),
+      usuario: new ListaUsuarioDTO(id, usuario.nome),
       message: 'Usuário atualizado com sucesso!',
     };
   }

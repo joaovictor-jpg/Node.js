@@ -53,13 +53,15 @@ export class ProdutoService {
   }
 
   private tranformaEntotyParaDTO(produto: ProdutoEntity): ListaProdutoDTO {
-    return new ListaProdutoDTO(
-      produto.id,
-      produto.nome,
+    const lista = new ListaProdutoDTO();
+    lista.id = produto.id;
+    lista.nome = produto.nome;
+    lista.caracteristicas = produto.caracteristicas.map(
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      produto.caracteristicas.map(({ id, produto, ...resto }) => resto),
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      produto.imagens.map(({ id, produto, ...resto }) => resto),
+      ({ id, produto, ...resto }) => resto,
     );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    lista.imagens = produto.imagens.map(({ id, produto, ...resto }) => resto);
+    return lista;
   }
 }
