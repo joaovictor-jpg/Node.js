@@ -20,7 +20,8 @@ export class PedidoController {
     @Param('id') usuarioId: string,
     @Body() dadosDoPedido: CreatePedidoDto,
   ) {
-    return this.pedidoService.create(usuarioId, dadosDoPedido);
+    const pedido = this.pedidoService.create(usuarioId, dadosDoPedido);
+    return pedido;
   }
 
   // @Get()
@@ -35,10 +36,14 @@ export class PedidoController {
 
   @Patch(':id')
   async update(
-    @Query('id') id: string,
+    @Param('id') id: string,
     @Body() updatePedidoDto: AtualizaPedidoDTO,
   ) {
-    return await this.pedidoService.update(id, updatePedidoDto);
+    const pedidoAtualizado = await this.pedidoService.update(
+      id,
+      updatePedidoDto,
+    );
+    return pedidoAtualizado;
   }
 
   // @Delete(':id')
