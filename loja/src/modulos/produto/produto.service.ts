@@ -5,6 +5,7 @@ import { Injectable } from '@nestjs/common';
 import { CriaProdutoDTO } from './dto/cria-produto.dto';
 import { v4 as uuid } from 'uuid';
 import { ListaProdutoDTO } from './dto/lista-produto.dto';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class ProdutoService {
@@ -18,6 +19,16 @@ export class ProdutoService {
     return produtosEntity.map((produto) =>
       this.tranformaEntotyParaDTO(produto),
     );
+  }
+
+  async buscarPorId(id: string): Promise<ListaProdutoDTO> {
+    const produto = await this.produtoRepository.findOneBy({ id });
+
+    if (produto === null) {
+      throw new NotFoundError('Produto não encontrado');
+    }
+
+    return this.tranformaEntotyParaDTO(produto);
   }
 
   async criaProduto(produtoNovo: CriaProdutoDTO): Promise<ListaProdutoDTO> {

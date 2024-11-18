@@ -1,17 +1,20 @@
 import { Module } from '@nestjs/common';
-import { UsuarioModule } from './usuario/usuario.module';
-import { ProdutoModule } from './produto/produto.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgressConfigServer } from './config/postgres.config.server';
 import { ConfigModule } from '@nestjs/config';
-import { PedidoModule } from './pedido/pedido.module';
 import { APP_FILTER } from '@nestjs/core';
-import { FiltroDeExcecaoGlobal } from './filtros/filtro-de-excecao-global';
+import { FiltroDeExcecaoGlobal } from './recursos/filtros/filtro-de-excecao-global';
+import { UsuarioModule } from './modulos/usuario/usuario.module';
+import { ProdutoModule } from './modulos/produto/produto.module';
+import { PedidoModule } from './modulos/pedido/pedido.module';
+import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
     UsuarioModule,
     ProdutoModule,
+    PedidoModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -19,7 +22,12 @@ import { FiltroDeExcecaoGlobal } from './filtros/filtro-de-excecao-global';
       useClass: PostgressConfigServer,
       inject: [PostgressConfigServer],
     }),
-    PedidoModule,
+    CacheModule.registerAsync({
+      useFactory: async () => ({
+        store: await redisStore({ ttl: 10 * 1000 }),
+      }),
+      isGlobal: true,
+    }),
   ],
   providers: [
     {
