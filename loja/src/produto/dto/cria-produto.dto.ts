@@ -4,6 +4,7 @@ import {
   IsNumber,
   IsPositive,
   IsString,
+  IsUUID,
   MaxLength,
   Min,
   ValidateNested,
@@ -13,6 +14,9 @@ import { ImagemProdutoDTO } from './imagem-produto.dto';
 import { Type } from 'class-transformer';
 
 export class CriaProdutoDTO {
+  @IsUUID()
+  @IsNotEmpty({ message: 'Usuário id é obrigatorio' })
+  usuarioId: string;
   @IsString()
   @IsNotEmpty({ message: 'Nome do produto não pode ser vazio' })
   nome: string;
