@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
+import { ClassSerializerInterceptor, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostgressConfigServer } from './config/postgres.config.server';
 import { ConfigModule } from '@nestjs/config';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { FiltroDeExcecaoGlobal } from './recursos/filtros/filtro-de-excecao-global';
 import { UsuarioModule } from './modulos/usuario/usuario.module';
 import { ProdutoModule } from './modulos/produto/produto.module';
@@ -16,6 +16,7 @@ import { AutenticacaoModule } from './modulos/autenticacao/autenticacao.module';
     UsuarioModule,
     ProdutoModule,
     PedidoModule,
+    AutenticacaoModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -29,12 +30,15 @@ import { AutenticacaoModule } from './modulos/autenticacao/autenticacao.module';
       }),
       isGlobal: true,
     }),
-    AutenticacaoModule,
   ],
   providers: [
     {
       provide: APP_FILTER,
       useClass: FiltroDeExcecaoGlobal,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
     },
   ],
 })

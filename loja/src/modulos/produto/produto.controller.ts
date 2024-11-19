@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Req,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -18,6 +19,7 @@ import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { AutenticacaoGuard } from '../autenticacao/autenticacao/autenticacao.guard';
+import { RequisicaoComUsuario } from '../autenticacao/interface/interface-com-usuario';
 
 @Controller('/produtos')
 export class ProdutoController {
@@ -53,8 +55,11 @@ export class ProdutoController {
   @Post()
   @UseGuards(AutenticacaoGuard)
   public async cadastrarProduto(
+    @Req() req: RequisicaoComUsuario,
     @Body() produto: CriaProdutoDTO,
   ): Promise<ListaProdutoDTO> {
+    produto.usuarioId = req.usuario.sub;
+
     const produtoDTO = await this.produtoService.criaProduto(produto);
     return produtoDTO;
   }

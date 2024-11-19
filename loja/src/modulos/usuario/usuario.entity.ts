@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { PedidoEntity } from '../pedido/pedido.entity';
 import {
   Entity,
@@ -17,6 +18,7 @@ export class UsuarioEntity {
   public nome: string;
   @Column({ name: 'email', length: 70, nullable: false, unique: true })
   public email: string;
+  @Exclude()
   @Column({ name: 'senha', length: 255, nullable: false })
   public senha: string;
   @CreateDateColumn({ name: 'created_at' })

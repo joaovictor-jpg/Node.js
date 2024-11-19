@@ -1,28 +1,30 @@
 import {
   Controller,
   Post,
-  Param,
   Get,
-  Query,
   Body,
   Patch,
   UseGuards,
+  Req,
+  Param,
 } from '@nestjs/common';
 import { PedidoService } from './pedido.service';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { AtualizaPedidoDTO } from './dto/atualiza-pedido.dto';
 import { AutenticacaoGuard } from '../autenticacao/autenticacao/autenticacao.guard';
+import { RequisicaoComUsuario } from '../autenticacao/interface/interface-com-usuario';
 
 @Controller('pedidos')
 @UseGuards(AutenticacaoGuard)
 export class PedidoController {
   constructor(private readonly pedidoService: PedidoService) {}
 
-  @Post(':id')
+  @Post()
   async create(
-    @Param('id') usuarioId: string,
+    @Req() req: RequisicaoComUsuario,
     @Body() dadosDoPedido: CreatePedidoDto,
   ) {
+    const usuarioId = req.usuario.sub;
     const pedido = await this.pedidoService.create(usuarioId, dadosDoPedido);
     return pedido;
   }
@@ -32,18 +34,20 @@ export class PedidoController {
   //   return this.pedidoService.findAll();
   // }
 
-  @Get(':id')
-  obtemPedidosDeUsuario(@Query('id') id: string) {
-    return this.pedidoService.obtemPedidosDeUsuario(id);
+  @Get()
+  obtemPedidosDeUsuario(@Req() req: RequisicaoComUsuario) {
+    return this.pedidoService.obtemPedidosDeUsuario(req.usuario.sub);
   }
 
   @Patch(':id')
   async update(
+    @Req() req: RequisicaoComUsuario,
     @Param('id') id: string,
     @Body() updatePedidoDto: AtualizaPedidoDTO,
   ) {
     const pedidoAtualizado = await this.pedidoService.update(
       id,
+      req.usuario.sub,
       updatePedidoDto,
     );
     return pedidoAtualizado;
