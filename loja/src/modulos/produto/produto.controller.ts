@@ -20,12 +20,14 @@ import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { AutenticacaoGuard } from '../autenticacao/autenticacao/autenticacao.guard';
 import { RequisicaoComUsuario } from '../autenticacao/interface/interface-com-usuario';
+import { CustomLogger } from 'src/recursos/interceptores/logger-produto/custom-logger.service';
 
 @Controller('/produtos')
 export class ProdutoController {
   constructor(
     private readonly produtoService: ProdutoService,
     @Inject(CACHE_MANAGER) private gerenciadorDeCache: Cache,
+    private readonly logger: CustomLogger,
   ) {}
 
   @Get()
@@ -61,6 +63,10 @@ export class ProdutoController {
     produto.usuarioId = req.usuario.sub;
 
     const produtoDTO = await this.produtoService.criaProduto(produto);
+
+    this.logger.logEmArquivo(produtoDTO);
+    this.logger.logColorido(produtoDTO);
+
     return produtoDTO;
   }
 

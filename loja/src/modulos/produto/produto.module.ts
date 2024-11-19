@@ -4,9 +4,10 @@ import { ProdutoRepository } from './produto.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProdutoEntity } from './produto.entity';
 import { ProdutoService } from './produto.service';
+import { CustomLoggerModule } from 'src/recursos/interceptores/logger-produto/logger.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProdutoEntity])],
+  imports: [TypeOrmModule.forFeature([ProdutoEntity]), CustomLoggerModule],
   controllers: [ProdutoController],
   providers: [ProdutoService, ProdutoRepository],
 })
