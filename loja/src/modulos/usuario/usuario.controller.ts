@@ -13,18 +13,23 @@ import { v4 as uuid } from 'uuid';
 import { ListaUsuarioDTO } from './dto/lista-usuario.dto';
 import { AtualizaUsuarioDTO } from './dto/atualiza-usuario.dto';
 import { UsuarioService } from './usuario.service';
+import { HashearSenhaPipe } from '../../recursos/pipes/hashear-senha.pipe';
 
 @Controller('/usuarios')
 export class UsuarioController {
   constructor(private usuarioService: UsuarioService) {}
 
   @Post()
-  async criaUsuario(@Body() dadosDoUsuario: UsuarioDTO) {
+  async criaUsuario(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Body() { senha, ...dadosDoUsuario }: UsuarioDTO,
+    @Body('senha', HashearSenhaPipe) senhaHasheada: string,
+  ) {
     const usuarioEntity = new UsuarioEntity(
       uuid(),
       dadosDoUsuario.nome,
       dadosDoUsuario.email,
-      dadosDoUsuario.senha,
+      senhaHasheada,
     );
     this.usuarioService.criaUsuario(usuarioEntity);
     return {
@@ -35,7 +40,14 @@ export class UsuarioController {
 
   @Get('/:email')
   async buscarId(@Param('email') email: string): Promise<ListaUsuarioDTO> {
-    return await this.usuarioService.buscarPorEmail(email);
+    const usuarioEntity = await this.usuarioService.buscarPorEmail(email);
+
+    const listaUsuarioDTO = new ListaUsuarioDTO(
+      usuarioEntity.id,
+      usuarioEntity.nome,
+    );
+
+    return listaUsuarioDTO;
   }
 
   @Get()

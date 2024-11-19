@@ -18,10 +18,10 @@ export class UsuarioService {
     return usuarioLista;
   }
 
-  async buscarPorEmail(email: string): Promise<ListaUsuarioDTO> {
+  async buscarPorEmail(email: string): Promise<UsuarioEntity> {
     const usuario = await this.buscarPorPropriedade('email', email);
 
-    return new ListaUsuarioDTO(usuario.id, usuario.nome);
+    return usuario;
   }
 
   async criaUsuario(usuarioEntity: UsuarioEntity): Promise<void> {
@@ -49,11 +49,10 @@ export class UsuarioService {
 
   private async buscarPorPropriedade(
     campo: string,
-    prop: string,
+    valor: string,
   ): Promise<UsuarioEntity> {
-    console.log(prop);
-    const usuario = await this.usuarioRepository.findOne({
-      [campo]: prop,
+    const usuario = await this.usuarioRepository.findOneBy({
+      [campo]: valor,
     });
 
     if (usuario === null) throw new NotFoundException('Usuário não encontrado');
