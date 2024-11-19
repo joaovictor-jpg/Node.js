@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { CriaProdutoDTO } from './dto/cria-produto.dto';
@@ -16,6 +17,7 @@ import { ListaProdutoDTO } from './dto/lista-produto.dto';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { AutenticacaoGuard } from '../autenticacao/autenticacao/autenticacao.guard';
 
 @Controller('/produtos')
 export class ProdutoController {
@@ -49,6 +51,7 @@ export class ProdutoController {
   }
 
   @Post()
+  @UseGuards(AutenticacaoGuard)
   public async cadastrarProduto(
     @Body() produto: CriaProdutoDTO,
   ): Promise<ListaProdutoDTO> {
@@ -57,6 +60,7 @@ export class ProdutoController {
   }
 
   @Put('/:id')
+  @UseGuards(AutenticacaoGuard)
   public async atualizarProduto(
     @Param('id') id: string,
     @Body() dadosAtualizados: AtualizaProdutoDTO,
@@ -66,6 +70,7 @@ export class ProdutoController {
   }
 
   @Delete('/:id')
+  @UseGuards(AutenticacaoGuard)
   public async deletaProduto(@Param('id') id: string): Promise<any> {
     await this.produtoService.deletaUProduto(id);
     return {

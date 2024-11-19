@@ -33,7 +33,11 @@ export class ProdutoService {
 
   async criaProduto(produtoNovo: CriaProdutoDTO): Promise<ListaProdutoDTO> {
     const produtoEntity = this.transformaDeDTOParaEntity(produtoNovo);
-    await this.produtoRepository.save(produtoEntity);
+    try {
+      await this.produtoRepository.save(produtoEntity);
+    } catch (error) {
+      console.error(error);
+    }
     return this.tranformaEntotyParaDTO(produtoEntity);
   }
 

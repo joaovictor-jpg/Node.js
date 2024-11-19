@@ -60,9 +60,13 @@ export class PedidoService {
     pedido.itensPedidos = itensPedidoEntity;
     pedido.valorTotal = valorTotal;
 
-    const pedidoCriado = await this.pedidoRepository.save(pedido);
-
-    return pedidoCriado;
+    try {
+      const pedidoCriado = await this.pedidoRepository.save(pedido);
+      return pedidoCriado;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
   }
 
   // findAll() {
