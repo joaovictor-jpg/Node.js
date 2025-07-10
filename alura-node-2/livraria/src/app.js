@@ -1,17 +1,19 @@
 import express from "express";
+import conectarNaDataBase from "./db/dbConnect.js";
+import routes from "./routes/index.js";
+
+const conexao = await conectarNaDataBase();
+
+conexao.on("error", (erro) => {
+    console.error("Error de conexão: ", erro);    
+});
+
+conexao.once("open", () => {
+    console.log("Conexão com o banco com sucesso!");    
+});
 
 const app = express();
-const livros = [
-    {id:1, title:"O Senhor dos Anéis"},
-    {id:2, title:"O Hobbit"}
-]
 
-app.get("/", (req, res) => {
-    res.status(200).send('Curso de Node JS');
-});
-
-app.get("/livros", (req, res) => {
-    res.status(200).json(livros);
-});
+routes(app);
 
 export default app;
