@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 async function conectarNaDataBase() {
-    mongoose.connect("mongodb://admin:admin123456@localhost:27017");
-    return mongoose.connection;
+  mongoose.connect(process.env.DB_CONNECTION_STRING);
+  return mongoose.connection;
 };
 
 export default conectarNaDataBase;
