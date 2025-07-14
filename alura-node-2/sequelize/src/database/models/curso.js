@@ -21,11 +21,12 @@ module.exports = (sequelize, DataTypes) => {
   Curso.init({
     titulo: DataTypes.STRING,
     descricao: DataTypes.STRING,
-    date_inicio: DataTypes.DATEONLY
+    data_inicio: DataTypes.DATEONLY
   }, {
     sequelize,
     modelName: 'Curso',
-    tableName: 'cursos'
+    tableName: 'cursos',
+    paranoid: true,
   });
   return Curso;
 };

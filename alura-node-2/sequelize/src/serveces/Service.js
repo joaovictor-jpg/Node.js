@@ -1,28 +1,40 @@
-const dataBase = require('../models');
+const dataBase = require('../database/models');
 
 class Service {
   constructor(nomeDaModel) {
     this.model = nomeDaModel;
   }
 
-  async pegaTodosOsRegistros() {
-    return await dataBase[this.model].findAll();
+  async pegaTodosOsRegistros(where = {}) {
+    return await dataBase[this.model].findAll({where: { ...where }});
   }
 
-  async pegaUmRegistroPorId(id) {    
-    const pessoa = dataBase[this.model].findByPk(id);
-    return pessoa;
+  async pegaRegistroPorEscopo(escopo) {
+    return dataBase[this.model].scope(escopo).findAll();
+  }
+
+  async pegaUmRegistroPorId(id) {
+    const registro = dataBase[this.model].findByPk(id);
+    return registro;
+  }
+
+  async pegaUmRegistro(where) {
+    const registro = dataBase[this.model].findOne({ where: { ...where } });
+    return registro;
+  }
+
+  async pegaEContaRegistros(options) {
+    return dataBase[this.model].findAndCountAll({ ...options });
   }
 
   async criaRegistro(dadosDoRegistro) {
     return dataBase[this.model].create(dadosDoRegistro);
   }
 
-  async atualizaRegistro(id, dadosAtualizados) {
+  async atualizaRegistro(where, dadosAtualizados, transacao = {}) {
     const listaRegistrosAtualizados = dataBase[this.model].update(dadosAtualizados, {
-      where: {
-        id: id
-      }
+      where: { ...where },
+      transaction: transacao
     });
 
     if (listaRegistrosAtualizados[0] === 0) {
@@ -32,11 +44,9 @@ class Service {
     return true;
   }
 
-  async excluirRegistro(id) {
+  async excluirRegistro(where) {
     return dataBase[this.model].destroy({
-      where: {
-        id: id
-      }
+      where: { ...where }
     });
   }
 }

@@ -4,7 +4,7 @@ const router = Router();
 
 const cursoController = new CursoController();
 
-router.get('/cursos', (req, res) => cursoController.pegaTodas(req, res));
+router.get('/cursos', (req, res) => cursoController.pegaCurso(req, res));
 router.get('/cursos/:id', (req, res) => cursoController.pegaUmPorId(req, res));
 router.post('/cursos/', (req, res) => cursoController.criaNovo(req, res));
 router.put('/cursos/:id', (req, res) => cursoController.atuliza(req, res));
