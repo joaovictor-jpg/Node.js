@@ -4,7 +4,7 @@
   "main": "cifra.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node hashAndSal.js"
+    "dev": "node encriptacaoSimetrica.js"
   },
   "keywords": [],
   "author": "",
