@@ -1,0 +1,47 @@
+import User from '../models/User';
+
+const users: User[] = [];
+
+async function create(user: User): Promise<User> {
+  return new Promise((resolve, rejects) => {
+    const existingUser = users.find(u => u.getEmail() === user.getEmail());
+
+    if (existingUser)
+      return rejects(new Error(`email: ${user.getEmail()} is already in use`));
+
+    users.push(user);
+    return resolve(user);
+  });
+}
+
+async function list(): Promise<User[]> {
+  return new Promise((resolve) => {
+    return resolve(users);
+  });
+}
+
+async function userById(id: string): Promise<User | undefined> {
+  return new Promise((resolve) => {
+    return resolve(users.find(c => c.getId() === id));
+  });
+}
+
+async function deleteById(id: string) {
+  const index = users.findIndex(u => u.getId() === id);
+
+  if (index === 1) {
+    throw new Error('User not found');
+  }
+
+  const userForDelete = users[index];
+
+  userForDelete?.delete();
+}
+
+export {
+  create,
+  list,
+  userById,
+  deleteById
+};
+
