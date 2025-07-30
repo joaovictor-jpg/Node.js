@@ -2,8 +2,8 @@ import { randomUUID } from 'crypto';
 
 export default class User {
   private readonly id: string;
-  private readonly name: string;
-  private readonly email: string;
+  private name: string;
+  private email: string;
   private readonly password: string;
   private readonly createAt: Date;
   private deleteAt?: Date;
@@ -34,5 +34,15 @@ export default class User {
 
   getDeleteHours(): Date | undefined {
     return this.deleteAt;
+  }
+
+  update(name: string, email: string) {
+    if (name !== undefined) {
+      this.name = name;
+    }
+
+    if (email !== undefined) {
+      this.email = email;
+    }
   }
 }

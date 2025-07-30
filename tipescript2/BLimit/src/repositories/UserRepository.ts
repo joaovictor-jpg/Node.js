@@ -22,8 +22,16 @@ async function list(): Promise<User[]> {
 
 async function userById(id: string): Promise<User | undefined> {
   return new Promise((resolve) => {
-    return resolve(users.find(c => c.getId() === id));
+    return resolve(users.find(u => u.getId() === id));
   });
+}
+
+async function update(id: string, name: string, email: string) {
+  const user = users.find(u => u.getId() === id);
+  if (!user) {
+    throw new Error('User not found');
+  }
+  user.update(name, email);
 }
 
 async function deleteById(id: string) {
@@ -42,6 +50,7 @@ export {
   create,
   list,
   userById,
-  deleteById
+  deleteById,
+  update
 };
 

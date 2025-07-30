@@ -35,6 +35,18 @@ class UserController {
     }
   }
 
+  static async update(req: Request, res: Response) {
+    try{
+      const id = req.params.id;
+      const {name, email} = req.body;
+      await UserService.update(id, name, email);
+      return res.status(204).send('successful update');
+    } catch(error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      return res.status(500).json({ message: message });
+    }
+  }
+
   static async delete(req: Request, res: Response) {
     try {
       const id = req.params.id;
