@@ -1,18 +1,7 @@
 import { Request, Response } from 'express';
-import AuthService from '../serves/authService';
 import UserService from '../serves/userService';
 
 class UserController {
-  static async register(req: Request, res: Response) {
-    try {
-      const newUser = await AuthService.registerUser(req.body.name, req.body.email, req.body.password);
-      return res.status(201).json(newUser);
-    } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Unknown error';
-      return res.status(500).json(message);
-    }
-  }
-
   static async list(req: Request, res: Response) {
     try {
       const users = await UserService.list();
