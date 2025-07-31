@@ -4,10 +4,13 @@ import userRouter from './routers/userRouter';
 import authRouter from './routers/auhtRouter';
 import authenctication from './middleware/authenticated';
 import { errorHandler } from './middleware/errorHandler';
+import cors from 'cors';
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
