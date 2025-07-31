@@ -26,6 +26,17 @@ async function userById(id: string): Promise<User | undefined> {
   });
 }
 
+async function userByEmail(email:string): Promise<User | undefined> {
+  return new Promise((resolve, rejects) => {
+    const user = users.find(u => u.getEmail() === email);
+
+    if (!user)
+      return rejects(new Error(`The email "${email}" was not found.`));
+
+    return resolve(user);
+  });
+}
+
 async function update(id: string, name: string, email: string) {
   const user = users.find(u => u.getId() === id);
   if (!user) {
@@ -51,6 +62,7 @@ export {
   list,
   userById,
   deleteById,
-  update
+  update,
+  userByEmail
 };
 

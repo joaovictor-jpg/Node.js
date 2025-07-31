@@ -32,6 +32,10 @@ export default class User {
     this.deleteAt = new Date();
   }
 
+  getPassword(): string {
+    return this.password;
+  }
+
   getDeleteHours(): Date | undefined {
     return this.deleteAt;
   }
