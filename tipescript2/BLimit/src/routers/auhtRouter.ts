@@ -6,7 +6,7 @@ import { loginUser } from '../dtos/loginUser';
 
 const authRouter = Router();
 
-authRouter.post('/', validate(loginUser), AuthController.login);
-authRouter.post('/', validate(createdUser), AuthController.register);
+authRouter.post('/login', validate(loginUser), AuthController.login);
+authRouter.post('/register', validate(createdUser), AuthController.register);
 
 export default authRouter;
