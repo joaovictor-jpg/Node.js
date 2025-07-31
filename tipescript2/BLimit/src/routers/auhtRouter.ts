@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import AuthController from '../constrollers/AuthController';
-import { createdUser } from '../dtos/createdUser';
+import AuthController from '../controllers/AuthController';
+import { createdUser } from '../DTOs/createdUser';
 import validate from '../validation/validation';
-import { loginUser } from '../dtos/loginUser';
+import { loginUser } from '../DTOs/loginUser';
 
 const authRouter = Router();
 
