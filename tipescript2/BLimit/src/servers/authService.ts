@@ -2,6 +2,7 @@ import {hash, compare } from 'bcryptjs';
 import User from '../models/User';
 import { create, userByEmail } from '../repositories/UserRepository';
 import { sign } from 'jsonwebtoken';
+import MyError from '../error/MyError';
 
 class AuthService {
   static async registerUser(name: string, email: string, password: string): Promise<User | undefined> {
@@ -23,19 +24,20 @@ class AuthService {
       const user = await userByEmail(email);
 
       if (!user) {
-        throw new Error(`The email "${email}" was not found.`);
+        console.error(`AuthService Error: The email "${email}" was not found.`);
+        throw new MyError(`The email "${email}" was not found.`, 404);
       }
 
       const isPasswordValid = await compare(password, user.getPassword());
 
       if (!isPasswordValid) {
-        throw new Error('Oops! That email or password doesn’t match our records.');
+        throw new MyError('Oops! That email or password doesn’t match our records.', 401);
       }
 
       const jwtSecret = process.env.JWT_SERCRET;
 
       if (!jwtSecret) {
-        throw new Error('JWT_SECRET environment variable is not defined.');
+        throw new MyError('JWT_SECRET environment variable is not defined.', 500);
       }
 
       const token = sign({
@@ -48,10 +50,12 @@ class AuthService {
       return token;
 
     } catch(error) {
-      if (error instanceof Error) {
-        throw new Error('Erro ao realizar login: ' + error.message);
+      if (error instanceof MyError) {
+        throw error;
+      } else if (error instanceof Error) {
+        throw new MyError(error.message, 500);
       } else {
-        throw new Error('Erro ao realizar login: ' + String(error));
+        throw new MyError(String(error), 500);
       }
     }
   }
