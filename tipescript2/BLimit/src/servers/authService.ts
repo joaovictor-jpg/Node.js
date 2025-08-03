@@ -47,6 +47,8 @@ class AuthService {
         expiresIn: '1h'
       });
 
+      console.log(`AuthService: User with email "${email}" logged in successfully.`);
+
       return token;
 
     } catch(error) {

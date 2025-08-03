@@ -1,3 +1,4 @@
+import MyError from '../error/MyError';
 import User from '../models/User';
 import { list, userById, deleteById, update } from '../repositories/UserRepository';
 
@@ -6,7 +7,7 @@ class UserService {
     return await list();
   }
 
-  static async findById(id: string): Promise<User | undefined> {
+  static async findById(id: string): Promise<User | MyError> {
     return await userById(id);
   }
 
