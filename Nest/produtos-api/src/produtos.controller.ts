@@ -8,6 +8,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { Produto } from './produto.model';
+import { ProdutosService } from './produtos.service';
 
 type params = {
   id: number;
@@ -15,37 +16,31 @@ type params = {
 
 @Controller('produtos')
 export class ProdutosController {
-  private readonly produtos: Produto[] = [
-    new Produto('Liv001', 'Livro de NestJS', 29.9),
-    new Produto('Liv002', 'Livro de Angular', 39.9),
-    new Produto('Liv003', 'Livro de React', 49.9),
-    new Produto('Liv004', 'Livro de Vue.js', 59.9),
-  ];
+  constructor(private readonly produtosService: ProdutosService) {}
 
   @Get()
   obterTodos(): Produto[] {
-    return this.produtos;
+    return this.produtosService.oberTodos();
   }
 
   @Get(':id')
   obterUm(): Produto {
-    return this.produtos[0];
+    return this.produtosService.obterUm(1);
   }
 
   @Post()
   criar(@Body() produto: Produto): void {
-    produto.setId(100);
-    this.produtos.push(produto);
+    this.produtosService.criar(produto);
   }
 
   @Put()
   aalterar(@Body() produto: Produto): Produto {
-    return produto;
+    return this.produtosService.alterar(produto);
   }
 
   @Delete(':id')
   delete(@Param() params: params): string {
-    this.produtos.pop();
+    this.produtosService.delete(params.id);
     return `Produto com ID: ${params.id}, foi removido com sucesso!`;
   }
 }
