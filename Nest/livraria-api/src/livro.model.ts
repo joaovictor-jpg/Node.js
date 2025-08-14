@@ -6,15 +6,15 @@ export class Livro extends Model<Livro> {
     type: DataType.STRING(60),
     allowNull: false,
   })
-  private codigo: string;
+  codigo: string;
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  private nome: string;
+  nome: string;
   @Column({
     type: DataType.DECIMAL(10, 5),
     allowNull: false,
   })
-  private preco: number;
+  preco: number;
 }

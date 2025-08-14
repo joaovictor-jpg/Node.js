@@ -19,28 +19,28 @@ export class LivrosController {
   constructor(private readonly livrosService: LivrosService) {}
 
   @Get()
-  obterTodos(): Livro[] {
-    return this.livrosService.oberTodos();
+  async obterTodos(): Promise<Livro[]> {
+    return await this.livrosService.oberTodos();
   }
 
   @Get(':id')
-  obterUm(): Livro {
-    return this.livrosService.obterUm(1);
+  async obterUm(@Param() params: params): Promise<Livro | null> {
+    return await this.livrosService.obterUm(params.id);
   }
 
   @Post()
-  criar(@Body() livro: Livro): void {
-    this.livrosService.criar(livro);
+  async criar(@Body() livro: Livro): Promise<void> {
+    await this.livrosService.criar(livro);
   }
 
   @Put()
-  aalterar(@Body() livro: Livro): Livro {
-    return this.livrosService.alterar(livro);
+  async alterar(@Body() livro: Livro): Promise<[number, Livro[]]> {
+    return await this.livrosService.alterar(livro);
   }
 
   @Delete(':id')
-  delete(@Param() params: params): string {
-    this.livrosService.delete(params.id);
+  async delete(@Param() params: params): Promise<string> {
+    await this.livrosService.delete(params.id);
     return `Livro com ID: ${params.id}, foi removido com sucesso!`;
   }
 }
