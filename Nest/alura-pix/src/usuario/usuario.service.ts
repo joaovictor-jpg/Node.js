@@ -15,16 +15,11 @@ export class UsuarioService {
     return `This action returns all usuario`;
   }
 
-  findByName(nomeDeUsuario: string): Usuario {
+  findByName(nomeDeUsuario: string): Usuario | undefined {
     const usuario = this.usuarios.find(
       (usuario) =>
         usuario.nomeDeUsuario.toLowerCase() === nomeDeUsuario.toLowerCase(),
     );
-
-    if (usuario === undefined || usuario === null) {
-      throw new Error('Usuário não encontrado');
-    }
-
     return usuario;
   }
 

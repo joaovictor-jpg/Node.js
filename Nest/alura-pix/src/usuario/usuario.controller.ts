@@ -29,6 +29,10 @@ export class UsuarioController {
   @Get(':nomeDeUsuario')
   findByName(@Param('nomeDeUsuario') nomeDeUsuario: string): Usuario {
     const usuarioEncontrado = this.usuarioService.findByName(nomeDeUsuario);
+    if (!usuarioEncontrado) {
+      throw new Error('Usuário não encontrado');
+    }
+
     return usuarioEncontrado;
   }
 

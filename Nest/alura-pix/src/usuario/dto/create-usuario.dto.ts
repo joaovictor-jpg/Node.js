@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { Usuario } from '../entities/usuario.entity';
 import { IsNomeDeUsuarioUnico } from './is-nome-de-usuario-único.validator';

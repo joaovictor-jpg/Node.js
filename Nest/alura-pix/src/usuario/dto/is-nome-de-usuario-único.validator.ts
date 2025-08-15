@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
+import { Injectable } from '@nestjs/common';
 import {
   registerDecorator,
   ValidationArguments,
@@ -9,7 +9,6 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 import { UsuarioService } from '../usuario.service';
-import { Injectable } from '@nestjs/common';
 
 @Injectable()
 @ValidatorConstraint()
