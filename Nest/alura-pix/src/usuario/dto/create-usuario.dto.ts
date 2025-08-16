@@ -1,32 +1,45 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { Usuario } from '../entities/usuario.entity';
 import { IsNomeDeUsuarioUnico } from './is-nome-de-usuario-único.validator';
+import { Exclude, Expose } from 'class-transformer';
 
 export class CreateUsuarioDto {
   id: number;
+  @Expose({
+    name: 'userName',
+  })
   @IsNotEmpty({
-    message: 'nomeDeUsuario é obrigatório',
+    message: 'userName is mandatory',
   })
   @IsString({
-    message: 'nomeDeUsuario precisar ser uma string',
+    message: 'userName precisar ser uma string',
   })
   @IsNomeDeUsuarioUnico({
-    message: 'nomeDeUsuario precisa ser único',
+    message: 'userName needs to be unique',
   })
   nomeDeUsuario: string;
   @IsEmail(
     {},
     {
-      message: 'email precisa ser um endereço de email válido',
+      message: 'email must be a valid email address',
     },
   )
   email: string;
+  @Expose({
+    name: 'password',
+  })
+  @Exclude({
+    toPlainOnly: true,
+  })
   @IsNotEmpty({
-    message: 'Senha é obrigatório',
+    message: 'password is mandatory',
   })
   senha: string;
+  @Expose({
+    name: 'fullName',
+  })
   @IsNotEmpty({
-    message: 'nomeCompleto é obrigatório',
+    message: 'fullName is mandatory',
   })
   nomeCompleto: string;
 
