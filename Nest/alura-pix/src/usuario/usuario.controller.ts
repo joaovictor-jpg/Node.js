@@ -1,24 +1,33 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
 } from '@nestjs/common';
-import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { Usuario } from './entities/usuario.entity';
+import { UsuarioService } from './usuario.service';
+import { NestResponseBuilder } from 'src/core/http/nest-response.builder';
 
 @Controller('users')
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
   @Post()
-  create(@Body() createUsuarioDto: CreateUsuarioDto): CreateUsuarioDto {
-    return this.usuarioService.create(createUsuarioDto);
+  create(@Body() createUsuarioDto: CreateUsuarioDto) {
+    const usuarioCriado = this.usuarioService.create(createUsuarioDto);
+    return new NestResponseBuilder()
+      .comStatus(HttpStatus.CREATED)
+      .comHeader({
+        location: `/users/${usuarioCriado.nomeDeUsuario}`,
+      })
+      .comBody(usuarioCriado)
+      .builder();
   }
 
   @Get()
