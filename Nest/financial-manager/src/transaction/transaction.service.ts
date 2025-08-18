@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, FindOperator, MoreThanOrEqual, Repository } from 'typeorm';
+import {
+  Between,
+  FindOperator,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Repository,
+} from 'typeorm';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { Transaction } from './entities/transaction.entity';
 import { Where } from './types/Where';
@@ -46,14 +52,11 @@ export class TransactionService {
     let valueF: number | FindOperator<number> | undefined;
 
     if (minimum_value && maximum_value) {
-      valueF = Between(
-        this.parseCurrencyStringToInt(minimum_value),
-        this.parseCurrencyStringToInt(maximum_value),
-      );
+      valueF = Between(minimum_value, maximum_value);
     } else if (minimum_value) {
-      valueF = MoreThanOrEqual(this.parseCurrencyStringToInt(minimum_value));
+      valueF = MoreThanOrEqual(minimum_value);
     } else if (maximum_value) {
-      valueF = MoreThanOrEqual(this.parseCurrencyStringToInt(maximum_value));
+      valueF = LessThanOrEqual(maximum_value);
     }
 
     const where: Where = {
