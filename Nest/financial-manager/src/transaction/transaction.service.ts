@@ -1,0 +1,78 @@
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Between, FindOperator, MoreThanOrEqual, Repository } from 'typeorm';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { Transaction } from './entities/transaction.entity';
+import { Where } from './types/Where';
+import { Filters } from './types/filters';
+
+@Injectable()
+export class TransactionService {
+  constructor(
+    @InjectRepository(Transaction)
+    private readonly transactionRepository: Repository<Transaction>,
+  ) {}
+
+  async create(
+    createTransactionDto: CreateTransactionDto,
+  ): Promise<Transaction> {
+    const newTransaction =
+      this.transactionRepository.create(createTransactionDto);
+    return this.transactionRepository.save(newTransaction);
+  }
+
+  async findAll(idUser: string, filters: Filters): Promise<Transaction[]> {
+    const where = this.buildWhereClause(idUser, filters);
+    return this.transactionRepository.find({ where });
+  }
+
+  private buildWhereClause(idUser: string, filters: Filters): Where {
+    const { start_date, end_date, category, minimum_value, maximum_value } =
+      filters;
+
+    const startDate = start_date
+      ? new Date(start_date)
+      : new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+
+    let endDate: Date;
+
+    if (end_date) {
+      endDate = new Date(end_date);
+    } else {
+      endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 30);
+    }
+
+    let valueF: number | FindOperator<number> | undefined;
+
+    if (minimum_value && maximum_value) {
+      valueF = Between(
+        this.parseCurrencyStringToInt(minimum_value),
+        this.parseCurrencyStringToInt(maximum_value),
+      );
+    } else if (minimum_value) {
+      valueF = MoreThanOrEqual(this.parseCurrencyStringToInt(minimum_value));
+    } else if (maximum_value) {
+      valueF = MoreThanOrEqual(this.parseCurrencyStringToInt(maximum_value));
+    }
+
+    const where: Where = {
+      idUser: idUser,
+      data: Between(startDate, endDate),
+      category: category,
+      value: valueF,
+    };
+
+    return where;
+  }
+
+  private parseCurrencyStringToInt(value: string): number {
+    return parseInt(value.replace(',', ''));
+  }
+
+  private formatIntToCurrencyString(value: number): string {
+    const cents = value % 100;
+    const real = Math.floor(value / 100);
+    return `${real},${cents.toString().padStart(2, '0')}`;
+  }
+}

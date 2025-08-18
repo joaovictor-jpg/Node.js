@@ -5,9 +5,9 @@
             "server": "localhost",
             "port": 5432,
             "driver": "PostgreSQL",
+            "name": "financias",
             "database": "database",
-            "username": "admin",
-            "name": "financial"
+            "username": "admin"
         }
     ]
 }
