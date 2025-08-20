@@ -5,7 +5,14 @@ import { Filters } from '../types/filters';
 
 @Injectable()
 export class ParseCurrencyPipe implements PipeTransform<Filters, Filters> {
-  private readonly currencyKeys = ['value', 'minimum_value', 'maximum_value'];
+  private readonly currencyKeys = [
+    'value',
+    'minimum_value',
+    'maximum_value',
+    'result',
+    'totalEntradas',
+    'totalGastos',
+  ];
 
   transform(value: Filters, metadata: ArgumentMetadata): Filters {
     if (!value || typeof value !== 'object') {

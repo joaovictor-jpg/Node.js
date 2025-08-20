@@ -5,8 +5,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { TransactionType } from './enums/TransactionType.enum';
 import { CreateTransactionDto } from '../dto/create-transaction.dto';
+import { TransactionType } from './enums/TransactionType.enum';
 
 @Entity('transactions')
 export class Transaction {
