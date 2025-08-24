@@ -18,9 +18,9 @@ export class Transaction {
   value: number;
   @Column({ type: 'date' })
   data: Date;
-  @Column()
+  @Column({ type: 'varchar' })
   category: string;
-  @Column({ nullable: true })
+  @Column({ type: 'varchar', nullable: true })
   store?: string;
   @Column({
     type: 'enum',
