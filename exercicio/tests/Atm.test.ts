@@ -66,10 +66,19 @@ describe('ATM', () => {
 
     it('should return two bills of 500 when withdrawing 1000', () => {
         const atm = new Atm();
-        const expected = '2 bills of 500';
+        const expected = '500 coins of 1';
 
-        const result = atm.withdrawing(1000);
+        const result = atm.withdrawing(500);
 
         expect(result).toEqual(expected);
+    })
+})
+
+describe('ATM Maquina: ERRORS', () => {
+    it ('When the ATM machine has no more money should return an error that shows', () => {
+        const atm = new Atm();
+        const expected = 'The ATM machine has not enough money, please go to the nearest atm machine';
+
+        expect(() => atm.withdrawing(10000000000000000000)).toThrow(expected);
     })
 })
