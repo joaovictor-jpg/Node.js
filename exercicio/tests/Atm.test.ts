@@ -66,9 +66,9 @@ describe('ATM', () => {
 
     it('should return two bills of 500 when withdrawing 1000', () => {
         const atm = new Atm();
-        const expected = '500 coins of 1';
+        const expected = '2 bills of 500';
 
-        const result = atm.withdrawing(500);
+        const result = atm.withdrawing(1000);
 
         expect(result).toEqual(expected);
     })

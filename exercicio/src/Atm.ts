@@ -6,35 +6,35 @@ export class Atm {
     values: IValues[] = [
         {
             value: 500,
-            quantity: 0
+            quantity: 2
         },
         {
             value: 200,
-            quantity: 0
+            quantity: 3
         },
         {
             value: 100,
-            quantity: 0,
+            quantity: 5,
         },
         {
             value: 50,
-            quantity: 0
+            quantity: 12
         },
         {
             value: 20,
-            quantity: 0,
+            quantity: 20,
         },
         {
             value: 10,
-            quantity: 0
+            quantity: 50
         },
         {
             value: 5,
-            quantity: 0
+            quantity: 100
         },
         {
             value: 2,
-            quantity: 0
+            quantity: 250
         },
         {
             value: 1,
@@ -58,8 +58,12 @@ export class Atm {
                     quantityR = counts;
                     v.quantity = v.quantity - counts;
                 }
-                this.myDictionary.push({value: v.value, count: quantityR});
+                this.myDictionary.push({ value: v.value, count: quantityR });
                 withdraw = withdraw - (v.value * quantityR)
+            }
+
+            if (withdraw <= 0) {
+                break
             }
         }
 
@@ -67,12 +71,12 @@ export class Atm {
 
         for (const item of this.myDictionary) {
             const billOrCoin = item.value >= 5 ? 'bill' : 'coin';
-            const plural = item.count > 1 ? 's': '';
+            const plural = item.count > 1 ? 's' : '';
             resultParts.push(`${item.count} ${billOrCoin}${plural} of ${item.value}`);
         }
 
         if (withdraw > 0) {
-            throw new Error("The ATM machine has not enough money, please go to the nearest atm machine");            
+            throw new Error("The ATM machine has not enough money, please go to the nearest atm machine");
         }
 
         return resultParts.join(' ');
