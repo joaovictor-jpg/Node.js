@@ -45,15 +45,14 @@ export class Atm {
     withdrawing(withdraw: number): string {
 
         this.myDictionary = [];
+
         for (const v of this.values) {
             if (withdraw >= v.value && v.quantity > 0) {
-                let money = v.value;
-                const counts = Math.floor(withdraw / money);
+                const counts = Math.floor(withdraw / v.value);
                 let quantityR = 0;
-                if (counts > v.quantity) {
+                if (counts >= v.quantity) {
                     quantityR = v.quantity;
                     v.quantity = 0
-                    money = money * quantityR;
                 } else {
                     quantityR = counts;
                     v.quantity = v.quantity - counts;
@@ -66,6 +65,8 @@ export class Atm {
                 break
             }
         }
+
+
 
         const resultParts: string[] = [];
 
